@@ -232,6 +232,7 @@ class Resnet():
 
     def pred(self):
         predictions = tf.argmax(self.logits, axis=1, name="predictions")
+        print(predictions)
         return predictions
 
 
