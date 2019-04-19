@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
 from keras.models import Model, load_model
 
-
+'图片去噪'
 
 '加载数据'
 (x_train, _), (x_test, _) = mnist.load_data()
