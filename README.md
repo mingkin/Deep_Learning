@@ -8,6 +8,6 @@ barcode.py
 ## resenet，tensorflow，keras版本网络实现
 
 ## torch 版本
-
+##最大熵 max_entroy.py
 
 
