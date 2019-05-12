@@ -20,6 +20,7 @@ from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torch.autograd import Variable
 
+
 class BasicBlock(nn.Module):
     """Basic Block for resnet 18 and resnet 34
     """
