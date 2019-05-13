@@ -213,8 +213,10 @@ if __name__ == '__main__':
     X_test = X_test_orig / 255.
 
     # Convert training and test labels to one hot matrices
-    Y_train = convert_to_one_hot(Y_train_orig, 6).T
-    Y_test = convert_to_one_hot(Y_test_orig, 6).T
+    # Y_train = convert_to_one_hot(Y_train_orig, 6).T
+    # Y_test = convert_to_one_hot(Y_test_orig, 6).T
+    Y_train = Y_train_orig.T
+    Y_test = Y_test_orig.T
 
     print("number of training examples = " + str(X_train.shape[0]))
     print("number of test examples = " + str(X_test.shape[0]))
@@ -253,10 +255,13 @@ if __name__ == '__main__':
             if epoch <= 1:
                 warmup_scheduler.step()
 
-            x_batch = Variable(x_batch)
-            y_batch = Variable(y_batch)
+            x_batch = x_batch.cpu()
+            y_batch = y_batch.cpu()
+            x_batch = Variable(x_batch.float())
+            x_batch = x_batch.permute(0, 3, 1, 2)  # 将原来第1维变为0维
+            y_batch = Variable(y_batch.long())
+            y_batch = y_batch.squeeze(1)
             net.train()
-            print(x_batch.size())
             optimizer.zero_grad()
             outputs = net(x_batch)
             loss = loss_function(outputs, y_batch)
@@ -273,6 +278,8 @@ if __name__ == '__main__':
             net.eval()
             test_loss = 0.0  # cost function error
             correct = 0.0
+            x_test = Variable(x_test.float())
+            y_batch = Variable(y_batch.long())
             outputs = net(x_test)
             loss = loss_function(outputs, y_test)
             test_loss += loss.item()
