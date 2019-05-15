@@ -5,10 +5,10 @@
 ## barcode为条形码解析小实例
 barcode.py
 
-## resenet，tensorflow，keras版本网络实现
+## resenet，tensorflow，keras，torch版本网络实现
 
-## torch 版本
-   ##最大熵 max_entroy.py
+
+## 最大熵 max_entroy.py
 
 ## ELMO中文版
 ELMO 中文版
