@@ -12,7 +12,7 @@ import jieba
 import operator
 
 
-path = './corpus/data*.txt'
+path = '../corpus/data*.txt'
 
 
 def char_count_corpus(infile, outfile):
