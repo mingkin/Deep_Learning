@@ -1,4 +1,18 @@
 # BERT
+  BERT修改版，评估指标加了精准率，召回率，f1
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 **\*\*\*\*\* New November 5th, 2018: Third-party PyTorch version of BERT
 available \*\*\*\*\***
