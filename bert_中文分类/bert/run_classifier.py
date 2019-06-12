@@ -25,7 +25,16 @@ import modeling
 import optimization
 import tokenization
 import tensorflow as tf
+import metrics
+import logging
 
+log = logging.getLogger('tensorflow')
+log.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh = logging.FileHandler('../logs/bert.log', encoding='utf-8')
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+log.addHandler(fh)
 flags = tf.flags
 
 FLAGS = flags.FLAGS
@@ -672,9 +681,11 @@ def model_fn_builder(bert_config, num_labels, init_checkpoint, learning_rate,
         predictions = tf.argmax(logits, axis=-1, output_type=tf.int32)
         accuracy = tf.metrics.accuracy(label_ids, predictions)
         loss = tf.metrics.mean(per_example_loss)
+        conf_mat = metrics.get_metrics_ops(label_ids, predictions, num_labels)  #混肴矩阵
         return {
             "eval_accuracy": accuracy,
             "eval_loss": loss,
+            "eval_cm": conf_mat,
         }
 
       eval_metrics = (metric_fn, [per_example_loss, label_ids, logits])
@@ -892,9 +903,23 @@ def main(_):
     output_eval_file = os.path.join(FLAGS.output_dir, "eval_results.txt")
     with tf.gfile.GFile(output_eval_file, "w") as writer:
       tf.logging.info("***** Eval results *****")
-      for key in sorted(result.keys()):
-        tf.logging.info("  %s = %s", key, str(result[key]))
-        writer.write("%s = %s\n" % (key, str(result[key])))
+      pre, rec, f1 = metrics.get_metrics(result["eval_cm"], len(label_list))      
+      tf.logging.info("eval_precision: {}".format(pre))
+      tf.logging.info("eval_recall: {}".format(rec))
+      tf.logging.info("eval_f1: {}".format(f1))
+      tf.logging.info("eval_accuracy: {}".format(result["eval_accuracy"]))
+      tf.logging.info("eval_loss: {}".format(result["eval_loss"]))
+      #metric_val=metrics.get_multi_metrics(result["eval_cm"])
+      #tf.logging.info("metric: {}".format(metric_val))
+      writer.write("eval_precision: {}\n".format(pre))
+      writer.write("eval_recall: {}\n".format(rec))
+      writer.write("eval_f1: {}\n".format(f1))
+      writer.write("eval_accuracy: {}\n".format(result["eval_accuracy"]))
+      writer.write("eval_loss: {}\n".format(result["eval_loss"]))
+      #writer.write("metric: {}\n".format(metric_val))
+      #for key in sorted(result.keys()):
+        #tf.logging.info("  %s = %s", key, str(result[key]))
+        #writer.write("%s = %s\n" % (key, str(result[key])))
   if FLAGS.do_predict:
     predict_examples = processor.get_test_examples(FLAGS.data_dir)
     predict_file = os.path.join(FLAGS.output_dir, "predict.tf_record")
