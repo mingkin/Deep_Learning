@@ -1,13 +1,13 @@
 #!/bin/sh
 
-export BERT_BASE_DIR=/data/antispam/kingming/bert-master/chinese_L-12_H-768_A-12
-export GLUE_DIR=/data/antispam/kingming/bert-master
+export BERT_BASE_DIR=./bert-master/chinese_L-12_H-768_A-12
+
 
 python run_classifier_weights.py \
   --task_name=ming \
   --do_train=true \
   --do_eval=true \
-  --data_dir=$GLUE_DIR/tt \
+  --data_dir=/data \
   --vocab_file=$BERT_BASE_DIR/vocab.txt \
   --bert_config_file=$BERT_BASE_DIR/bert_config.json \
   --init_checkpoint=$BERT_BASE_DIR/bert_model.ckpt \
