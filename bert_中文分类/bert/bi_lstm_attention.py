@@ -16,7 +16,7 @@ class BlstmAtten(object):
     Bi-LSTM Attention 用于文本分类
     """
     def __init__(self, embedded_chars, hidden_sizes, labels, num_label,
-                 dropout_rate, max_len):
+                 dropout_rate, max_len, weights):
         """
         构建BLSTM+ATTEN模型结构
         :param embedded_chars:
@@ -33,7 +33,7 @@ class BlstmAtten(object):
         self.dropout_rate = dropout_rate
         self.max_len = max_len
         self.embedding_size = embedded_chars.shape[-1].value
-
+        self.weights = weights
 
     def _attention(self, H):
         """
@@ -132,6 +132,13 @@ class BlstmAtten(object):
             probabilities = tf.nn.softmax(logits, axis=-1)
             log_probs = tf.nn.log_softmax(logits, axis=-1)
             one_hot_labels = tf.one_hot(self.labels, depth=self.num_label, dtype=tf.float32)
+
+            if self.weights:
+                # class weight
+                tf.logging.info("create weight cross entropy pos_weight=" + self.weights)
+                pos_weight = tf.constant([float(p) for p in self.weights.split(",")])
+                one_hot_labels = tf.multiply(one_hot_labels, pos_weight)
+
             per_example_loss = -tf.reduce_sum(one_hot_labels * log_probs, axis=-1)
             loss = tf.reduce_mean(per_example_loss)
 
