@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export BERT_BASE_DIR=./bert-master/chinese_L-12_H-768_A-12
+export BERT_BASE_DIR=./chinese_L-12_H-768_A-12
 
 
 python run_classifier_weights.py \
