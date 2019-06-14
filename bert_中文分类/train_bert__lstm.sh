@@ -16,4 +16,4 @@ python run_bert_lstm.py \
   --learning_rate=2e-5 \
   --num_train_epochs=3.0 \
   --weights='1,10' \
-  --output_dir=/data/antispam/kingming/bert-master/output1/
+  --output_dir=/output
