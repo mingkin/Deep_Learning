@@ -21,9 +21,9 @@
 # limitations under the License.
 """BERT lstm  attention model finetuning ."""
 
-#from __future__ import absolute_import
-#from __future__ import division
-#from __future__ import print_function
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 
 import collections
 import csv
@@ -75,6 +75,11 @@ flags.DEFINE_string(
 ## Other parameters
 
 # blstm_atten模型的参数
+
+tf.flags.DEFINE_string(
+    "weights", None,
+    "weights: 1,10"
+)
 tf.flags.DEFINE_list(
     "hidden_sizes", [256],
     "hidden size of lstm cell"
@@ -85,6 +90,9 @@ tf.flags.DEFINE_float(
     "dropout_rate", 0.5,
     "dropout rate"
 )
+
+
+
 flags.DEFINE_string(
     "init_checkpoint", None,
     "Initial checkpoint (usually from a pre-trained BERT model).")
@@ -460,7 +468,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
   text_cnn = BlstmAtten(embedded_chars=embedding, hidden_sizes=FLAGS.hidden_sizes,
                         labels=labels, num_label=num_labels,
                         dropout_rate=FLAGS.dropout_rate,
-                        max_len=FLAGS.max_seq_length)
+                        max_len=FLAGS.max_seq_length, weights=FLAGS.weights)
 
   result = text_cnn.gen_result()
   return result
