@@ -37,6 +37,7 @@ def convert_idx_to_token_tensor(inputs, idx2token):
 
     return tf.py_func(my_func, [inputs], tf.string)
 
+
 # # def pad(x, maxlen):
 # #     '''Pads x, list of sequences, and make it as a numpy array.
 # #     x: list of sequences. e.g., [[2, 3, 4], [5, 6, 7, 8, 9], ...]
