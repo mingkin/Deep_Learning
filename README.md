@@ -1,6 +1,7 @@
 # ML
 实现一些机器学习方法，numpy,或者调库函数
 
+资料汇总   https://wqw547243068.github.io/2018/07/21/summary/
 
 ## barcode为条形码解析小实例
 barcode.py
